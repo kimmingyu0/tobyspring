@@ -1,4 +1,4 @@
-package com.kitec.springframe.dao;
+package com.kimmingyu0.springframe.dao;
 
 import java.sql.Connection;
 import java.sql.SQLException;

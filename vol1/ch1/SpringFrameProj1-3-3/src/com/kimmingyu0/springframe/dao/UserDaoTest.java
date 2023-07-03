@@ -1,8 +1,8 @@
-package com.kitec.springframe.dao;
+package com.kimmingyu0.springframe.dao;
 
 import java.sql.SQLException;
 
-import com.kitec.springframe.domain.User;
+import com.kimmingyu0.springframe.domain.User;
 
 
 
@@ -13,18 +13,18 @@ public class UserDaoTest {
 
 		User user = new User();
 		user.setId("whiteship");
-		user.setName("¹é±â¼±");
+		user.setName("ë°±ê¸°ì„ ");
 		user.setPassword("married");
 
 		dao.add(user);
 			
-		System.out.println(user.getId() + " µî·Ï ¼º°ø");
+		System.out.println(user.getId() + "\níšŒì› ë“±ë¡ ì™„ë£Œ");
 		
 		User user2 = dao.get(user.getId());
 		System.out.println(user2.getName());
 		System.out.println(user2.getPassword());
 			
-		System.out.println(user2.getId() + " Á¶È¸ ¼º°ø");
+		System.out.println(user2.getId() + "\níšŒì› ì¡°íšŒ ì™„ë£Œ");
 	}
 
 }

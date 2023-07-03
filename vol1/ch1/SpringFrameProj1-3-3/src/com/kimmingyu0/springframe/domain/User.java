@@ -1,4 +1,4 @@
-package com.kitec.springframe.domain;
+package com.kimmingyu0.springframe.domain;
 
 public class User {
 	String id;

@@ -1,13 +1,13 @@
-package com.kitec.springframe.dao;
+package com.kimmingyu0.springframe.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class NUserDao extends UserDao {
+public class DConnectionMaker implements ConnectionMaker {
 
 	@Override
-	protected Connection getConnection() throws ClassNotFoundException, SQLException {
+	public Connection makeConnection() throws ClassNotFoundException, SQLException {
 		Class.forName("com.mysql.cj.jdbc.Driver");
 		Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/sbdt_db?characterEncoding=UTF-8", 
 				"root",
