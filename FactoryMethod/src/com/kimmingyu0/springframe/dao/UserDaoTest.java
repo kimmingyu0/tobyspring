@@ -12,15 +12,6 @@ public class UserDaoTest {
 
 		// UserDao 인스턴스 메서드 create 호출
 		dao.create("NewConnectionMaker");
-		/* arguments에 따라  
-		* UserDao 내부에서 
-		* NewConnectionMaker
-		* or
-		* DConnectionMaker
-		* 두개중 하나를 인스턴스화 후
-		* UserDao 내부 ConnectionMarker 참조변수에 대입한다.
-		* 위 인스턴스들은 oracle 또는 mysql과의 커넥터를 생성한다.
-		*/ 
 
 		User user = new User();
 		user.setId("whiteship");

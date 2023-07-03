@@ -17,7 +17,12 @@ public class UserDao implements DaoFactory {
 //	}
 
 	/**
-	 * ConnectionMaker 인스턴스화 후 UserDao내 참조변수 저장
+	 * <h2>oracle 또는 mysql과의 커넥터를 생성하기 위한 메서드.</h2> <br> 
+	 * ConnectionMaker 인터페이스의 구체 클래스를 인스턴스화 후 UserDao내 참조변수에 저장. <br>
+	 * arguments에 따라 UserDao 내부에서 NewConnectionMaker or DConnectionMaker 중 <br> 
+	 * 해당하는 클래스를 인스턴스화 후 UserDao 내부 ConnectionMarker 참조변수에 대입. <br>
+	 * <br>
+	 * 
 	 * @param DConnectionMarker and NewConnectionMaker
 	 * @return ConnectionMaker 인터페이스의 구체화 class 인스턴스의 참조변수
 	 * */
