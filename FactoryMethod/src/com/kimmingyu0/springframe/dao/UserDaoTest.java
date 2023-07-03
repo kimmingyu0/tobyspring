@@ -8,10 +8,11 @@ import com.kimmingyu0.springframe.domain.User;
 
 public class UserDaoTest {
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		UserDao dao = DaoFactory.createDao();
-
-		// UserDao 인스턴스 메서드 create 호출
-		dao.create("NewConnectionMaker");
+		
+		DaoFactory factory = new NewConnectionDao();
+		ConnectionMaker connection = factory.createConnection();
+		
+		UserDao dao = new UserDao(connection);
 
 		User user = new User();
 		user.setId("whiteship");

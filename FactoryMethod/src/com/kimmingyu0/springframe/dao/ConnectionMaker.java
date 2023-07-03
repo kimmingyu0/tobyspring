@@ -8,6 +8,6 @@ public interface ConnectionMaker {
 	/**
 	 * Database Connection 생성 추상 메서드
 	 * */
-	public abstract Connection makeConnection() throws ClassNotFoundException, SQLException;
+	Connection makeConnection() throws ClassNotFoundException, SQLException;
 
 }
