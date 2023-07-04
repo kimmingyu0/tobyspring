@@ -23,7 +23,8 @@ public class UserDaoTest {
 			
 		System.out.println(user.getId() + "\n회원 등록 완료");
 		
-		User user2 = dao.get(conn, user.getId());
+		Connection conn2 = dao.createConnection();
+		User user2 = dao.get(conn2, user.getId());
 		System.out.println(user2.getName());
 		System.out.println(user2.getPassword());
 			
