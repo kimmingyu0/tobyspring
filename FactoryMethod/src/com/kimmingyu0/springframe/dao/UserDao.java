@@ -10,8 +10,8 @@ import com.kimmingyu0.springframe.domain.User;
 public abstract class UserDao {
 
 	protected ConnectionMaker connectionMaker;
-	
-	public abstract void createConnection();
+
+	public abstract void createConnection() throws ClassNotFoundException, SQLException;
 
 	public void add(User user) throws ClassNotFoundException, SQLException {
 		Connection c = this.connectionMaker.makeConnection();
