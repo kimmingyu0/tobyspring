@@ -1,11 +1,12 @@
 package com.kimmingyu0.springframe.dao;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 
 public class DConnectionDao extends UserDao {
 	@Override
-	public void createConnection() throws ClassNotFoundException, SQLException {
-		this.connectionMaker.makeConnection();
+	public Connection createConnection() throws ClassNotFoundException, SQLException {
+		return this.connectionMaker.makeConnection();
 	}	
 	
 	public DConnectionDao () {

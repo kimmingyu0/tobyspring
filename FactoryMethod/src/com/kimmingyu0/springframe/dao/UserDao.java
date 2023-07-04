@@ -11,11 +11,9 @@ public abstract class UserDao {
 
 	protected ConnectionMaker connectionMaker;
 
-	public abstract void createConnection() throws ClassNotFoundException, SQLException;
+	public abstract Connection createConnection() throws ClassNotFoundException, SQLException;
 
-	public void add(User user) throws ClassNotFoundException, SQLException {
-		Connection c = this.connectionMaker.makeConnection();
-
+	public void add(Connection c, User user) throws ClassNotFoundException, SQLException {
 		PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
 		ps.setString(1, user.getId());
 		ps.setString(2, user.getName());
@@ -27,8 +25,7 @@ public abstract class UserDao {
 		c.close();
 	}
 
-	public User get(String id) throws ClassNotFoundException, SQLException {
-		Connection c = this.connectionMaker.makeConnection();
+	public User get(Connection c,String id) throws ClassNotFoundException, SQLException {
 		PreparedStatement ps = c.prepareStatement("select * from users where id = ?");
 		ps.setString(1, id);
 
