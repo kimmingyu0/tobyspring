@@ -7,28 +7,6 @@ import com.kimmingyu0.springframe.domain.User;
 
 
 public class UserDaoTest {
-	public static class DConnectionDao extends UserDao {
-		@Override
-		public ConnectionMaker createConnection() {
-			return new DConnectionMaker();
-		}
-		
-		public DConnectionDao(){
-			this.connectionMaker = this.createConnection();
-		}
-	}
-	
-	public static class NewConnectionDao extends UserDao{
-		@Override
-		public ConnectionMaker createConnection() {
-			return new NewConnectionMaker();
-		}
-		
-		public NewConnectionDao(){
-			this.connectionMaker = this.createConnection();
-		}
-	}
-	
 	
 	public static void main(String[] args) throws ClassNotFoundException, SQLException {
 		
