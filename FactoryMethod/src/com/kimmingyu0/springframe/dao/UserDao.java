@@ -1,20 +1,17 @@
 package com.kimmingyu0.springframe.dao;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import com.kimmingyu0.springframe.domain.User;
 
-public class UserDao {
+public abstract class UserDao {
 
-	private ConnectionMaker connectionMaker;
-
-	public UserDao(ConnectionMaker simpleConnectionMaker) {
-		this.connectionMaker = simpleConnectionMaker;
-	}
+	protected ConnectionMaker connectionMaker;
+	
+	public abstract ConnectionMaker createConnection();
 
 	public void add(User user) throws ClassNotFoundException, SQLException {
 		Connection c = this.connectionMaker.makeConnection();
