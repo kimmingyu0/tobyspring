@@ -11,7 +11,7 @@ public abstract class UserDao {
 
 	protected ConnectionMaker connectionMaker;
 	
-	public abstract ConnectionMaker createConnection();
+	public abstract void createConnection();
 
 	public void add(User user) throws ClassNotFoundException, SQLException {
 		Connection c = this.connectionMaker.makeConnection();
