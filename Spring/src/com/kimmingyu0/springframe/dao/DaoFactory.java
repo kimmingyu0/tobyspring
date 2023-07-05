@@ -8,17 +8,18 @@ public class DaoFactory {
 
 	@Bean
 	public UserDao userDao() {
-		return new UserDao(connectionMaker());
+		 UserDao dao = new UserDao();
+		 dao.setConnection(connectionMaker());
+		 return dao;
 	}
 
 	@Bean
 	public ConnectionMaker connectionMaker() {
-		return new DConnectionMaker();
+		DConnectionMaker connection = new DConnectionMaker();
+		connection.setClassName("com.mysql.cj.jdbc.Driver");
+		connection.setUrl("jdbc:mysql://localhost:3306/sbdt_db?characterEncoding=UTF-8");
+		connection.setUserName("root");
+		connection.setPassword("1234");
+		return connection;
 	}
-
-	@Bean
-	public ConnectionMaker connectionMaker2() {
-		return new NConnectionMaker();
-	}
-
 }

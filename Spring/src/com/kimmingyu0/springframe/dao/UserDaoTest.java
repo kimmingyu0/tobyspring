@@ -21,12 +21,9 @@ public class UserDaoTest {
 		dao.add(user);
 
 		System.out.println(user.getId() + "\n등록 완료");
-
-		User user2 = dao.get(user.getId());
-		System.out.println(user2.getName());
-		System.out.println(user2.getPassword());
-
-		System.out.println(user2.getId() + "\n조회 완료");
+		System.out.println(user.getName());
+		System.out.println(user.getPassword());
+		System.out.println(user.getId() + "\n조회 완료");
 	}
 
 }
