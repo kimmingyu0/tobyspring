@@ -1,29 +1,37 @@
 package com.kimmingyu0.springframe.dao;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 import java.sql.SQLException;
 
+import org.junit.jupiter.api.Test;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import com.kimmingyu0.springframe.domain.User;
 
 public class UserDaoTest {
-	public static void main(String[] args) throws ClassNotFoundException, SQLException {
-		ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
 
+	@Test
+	public void addAndGet() throws SQLException, ClassNotFoundException {
+		ApplicationContext context = new AnnotationConfigApplicationContext(DaoFactory.class);
 		UserDao dao = context.getBean("userDao", UserDao.class);
 
+		dao.deleteAll();
+		assertEquals(dao.getCount(), 0);
+
 		User user = new User();
-		user.setId("whiteship");
-		user.setName("백기선");
-		user.setPassword("married");
+		user.setId("gyumee");
+		user.setName("박성철");
+		user.setPassword("springno1");
 
 		dao.add(user);
+		assertEquals(dao.getCount(), 1);
 
-		System.out.println(user.getId() + "\n등록 완료");
-		System.out.println(user.getName());
-		System.out.println(user.getPassword());
-		System.out.println(user.getId() + "\n조회 완료");
+		User user2 = dao.get(user.getId());
+
+		assertEquals(user2.getName(), user.getName());
+		assertEquals(user2.getPassword(), user.getPassword());
 	}
 
 }

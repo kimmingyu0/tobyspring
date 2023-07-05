@@ -1,25 +1,31 @@
 package com.kimmingyu0.springframe.dao;
 
+import javax.sql.DataSource;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 @Configuration
 public class DaoFactory {
 
 	@Bean
-	public UserDao userDao() {
-		 UserDao dao = new UserDao();
-		 dao.setConnection(connectionMaker());
-		 return dao;
+	public DataSource dataSource() {
+
+		SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
+
+		dataSource.setDriverClass(com.mysql.cj.jdbc.Driver.class);
+		dataSource.setUrl("jdbc:mysql://localhost:3306/sbdt_db?characterEncoding=UTF-8");
+		dataSource.setUsername("root");
+		dataSource.setPassword("1234");
+
+		return dataSource;
 	}
 
 	@Bean
-	public ConnectionMaker connectionMaker() {
-		DConnectionMaker connection = new DConnectionMaker();
-		connection.setClassName("com.mysql.cj.jdbc.Driver");
-		connection.setUrl("jdbc:mysql://localhost:3306/sbdt_db?characterEncoding=UTF-8");
-		connection.setUserName("root");
-		connection.setPassword("1234");
-		return connection;
+	public UserDao userDao() {
+		UserDao userDao = new UserDao();
+		userDao.setDataSource(dataSource());
+		return userDao;
 	}
 }
