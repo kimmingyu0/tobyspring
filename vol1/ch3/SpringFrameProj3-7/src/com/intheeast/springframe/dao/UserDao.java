@@ -15,12 +15,15 @@ import org.springframework.jdbc.core.RowMapper;
 import com.intheeast.springframe.domain.User;
 
 public class UserDao {
+private JdbcTemplate jdbcTemplate;
 	
-	private JdbcTemplate jdbcTemplate;
+	public void setJdbcTemplate(JdbcTemplate jdbcTemplate) {
+		this.jdbcTemplate = jdbcTemplate;
+	}
 	
-	public void setDataSource(DataSource dataSource) {
-		this.jdbcTemplate = new JdbcTemplate(dataSource);		
-	}	
+//	public void setDataSource(DataSource dataSource) {
+//		this.jdbcTemplate.setDataSource(dataSource);		
+//	}	
 	
 	public void add(final User user) throws SQLException {
 		this.jdbcTemplate.update("insert into users(id, name, password) values(?,?,?)",
