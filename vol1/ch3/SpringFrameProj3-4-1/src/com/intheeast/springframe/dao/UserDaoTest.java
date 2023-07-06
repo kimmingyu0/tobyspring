@@ -1,4 +1,4 @@
-package com.kitec.springframe.dao;
+package com.intheeast.springframe.dao;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -10,35 +10,32 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import com.kitec.springframe.domain.User;
-
+import com.intheeast.springframe.domain.User;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {TestDaoFactory.class})
-public class UserDaoTest { 
-	
-	@Autowired
-	ApplicationContext context;
+public class UserDaoTest {
 	
 	//@Autowired
+	//private ApplicationContext context;	
+	 
+	@Autowired
 	private UserDao dao;
-	
 	private User user1;
 	private User user2;
-	private User user3;	
+	private User user3;
+	
 		
 	@BeforeEach
 	public void setUp() {	
 		
-		//this.dao = this.context.getBean("userDao", UserDao.class);
-		user1 = new User("user1", "배고픕니다", "점심 먹고 싶어요,");
-		user2 = new User("user2", "어디가죠?", "편의점");
-		user3 = new User("user3", "어디가죠?", "집밥집?");
+		user1 = new User("user1", "sungkim", "0000");
+		user2 = new User("user2", "brucelee", "1111");
+		user3 = new User("user3", "haechoi", "2222");
 	}
 	
 	@Test

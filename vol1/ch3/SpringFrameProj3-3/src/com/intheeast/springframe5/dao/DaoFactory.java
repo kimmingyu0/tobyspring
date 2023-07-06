@@ -1,4 +1,4 @@
-package com.kitec.springframe.dao;
+package com.intheeast.springframe5.dao;
 
 import javax.sql.DataSource;
 
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
 
 @Configuration
-public class TestDaoFactory {
+public class DaoFactory {
 	
 	@Bean
 	public DataSource dataSource() {
@@ -15,9 +15,8 @@ public class TestDaoFactory {
 		SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
 		
 		dataSource.setDriverClass(com.mysql.cj.jdbc.Driver.class);
-		dataSource.setUrl("jdbc:mysql://192.168.0.209:3306/testdb?characterEncoding=UTF-8");
-		//		dataSource.setUrl("jdbc:mysql://localhost:3306/testdb?characterEncoding=UTF-8");
-		dataSource.setUsername("testdb");
+		dataSource.setUrl("jdbc:mysql://localhost:3306/sbdt_db?characterEncoding=UTF-8");
+		dataSource.setUsername("root");
 		dataSource.setPassword("1234");
 
 		return dataSource;
@@ -29,5 +28,5 @@ public class TestDaoFactory {
 		userDao.setDataSource(dataSource());
 		return userDao;
 	}
-}
 
+}
