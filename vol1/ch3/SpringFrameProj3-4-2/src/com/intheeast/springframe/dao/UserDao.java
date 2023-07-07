@@ -27,6 +27,7 @@ public class UserDao {
 	// =>
 	// PreparedStatement makePreparedStatement(Connection c) throws SQLException;
 	public void add(final User user) throws SQLException {
+
 		this.jdbcContext.workWithStatementStrategy(c -> {
 			PreparedStatement ps = c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
 			ps.setString(1, user.getId());
@@ -34,20 +35,22 @@ public class UserDao {
 			ps.setString(3, user.getPassword());
 
 			return ps;
-		}
-//				new StatementStrategy() {			
+		});
+	}
+
+//				new StatementStrategy() {
 //					public PreparedStatement makePreparedStatement(Connection c)
 //					throws SQLException {
-//						PreparedStatement ps = 
+//						PreparedStatement ps =
 //							c.prepareStatement("insert into users(id, name, password) values(?,?,?)");
 //						ps.setString(1, user.getId());
 //						ps.setString(2, user.getName());
 //						ps.setString(3, user.getPassword());
-//						
+//
 //						return ps;
 //					}
 //				}
-		);
+//		);
 	}
 
 	public User get(String id) throws ClassNotFoundException, SQLException {
@@ -76,7 +79,7 @@ public class UserDao {
 
 		return user;
 	}
-	
+
 	// functional Interface = StatementStrategy
 	// =>
 	// PreparedStatement makePreparedStatement(Connection c) throws SQLException;
