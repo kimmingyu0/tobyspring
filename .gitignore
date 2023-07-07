@@ -1,5 +1,6 @@
 README.md
 
+SQLExcepsionTest
 vol1/ch4/
 vol1/ch5/
 vol1/ch6/
@@ -9,3 +10,4 @@ FactoryMethod/
 Spring/
 *.iml
 .idea/
+.project
