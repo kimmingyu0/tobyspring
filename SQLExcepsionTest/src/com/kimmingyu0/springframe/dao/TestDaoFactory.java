@@ -23,6 +23,18 @@ public class TestDaoFactory {
 	}
 
 	@Bean
+	public DataSource dataSource2(){
+		SimpleDriverDataSource dataSource = new SimpleDriverDataSource();
+
+		dataSource.setDriverClass(com.mysql.cj.jdbc.Driver.class);
+		dataSource.setUrl("jdbc:mysql://localhost:3306/sbdt_db1?characterEncoding=UTF-8");
+		dataSource.setUsername("root");
+		dataSource.setPassword("1234");
+
+		return dataSource;
+	}
+
+	@Bean
 	public UserDaoJdbc userDao() {
 		UserDaoJdbc userDaoJdbc = new UserDaoJdbc();
 		userDaoJdbc.setDataSource(dataSource());
@@ -32,6 +44,7 @@ public class TestDaoFactory {
 	@Bean
 	public UserDaoSql userDao2(){
 		UserDaoSql userDaoSql = new UserDaoSql();
+		userDaoSql.setDataSource(dataSource2());
 		return userDaoSql;
 	}
 }

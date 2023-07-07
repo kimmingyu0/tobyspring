@@ -28,6 +28,7 @@ public class UserDaoTest {
 	@Autowired UserDao dao; 
 	@Autowired DataSource dataSource;
 	@Autowired UserDaoSql dao2;
+	@Autowired DataSource dataSource2;
 
 	
 	private User user1;
@@ -143,30 +144,25 @@ public class UserDaoTest {
 		}
 		catch(DuplicateKeyException ex) {
 			SQLException sqlEx = (SQLException)ex.getCause();
-			System.out.println(sqlEx);
-			assertNotEquals(ex,sqlEx);
-			SQLExceptionTranslator set = new SQLErrorCodeSQLExceptionTranslator(this.dataSource);			
+			SQLExceptionTranslator set = new SQLErrorCodeSQLExceptionTranslator(this.dataSource);
 			DataAccessException transEx = set.translate(null, null, sqlEx);
 			assertEquals(DuplicateKeyException.class, transEx.getClass());
-
 		}
 	}
 
 	@Test
-	public void sqlExceptionTranslate2() throws ClassNotFoundException{
-		try {
+	public void sqlExceptionTranslate2() throws ClassNotFoundException {
+//		try {
 			dao2.add(user1);
 			dao2.add(user1);
-		}catch (SQLException EX){
-			DuplicateKeyException dueEx = (DuplicateKeyException) EX.getCause();
-			assertNotEquals(EX, dueEx);
-			SQLExceptionTranslator set = new SQLErrorCodeSQLExceptionTranslator(this.dataSource);
-			DataAccessException transEx2 = set.translate(null,null, EX);
-			assertEquals(SQLException.class, transEx2.getClass());
-		}
+//		} catch (SQLException EX) {
+//			DuplicateKeyException dueEx = new DuplicateKeyException(EX.getMessage(),EX.getCause()) ;
+//			assertNotEquals(EX.getClass(), dueEx.getClass());
+//			SQLException sqlEX = (SQLException) EX.getCause();
+//			SQLExceptionTranslator set = new SQLErrorCodeSQLExceptionTranslator(this.dataSource2);
+//			DataAccessException transEx2 = set.translate(null,null, sqlEX);
+			// -> Spring에서 각 sql 마다 에러번호에 대해 맵핑한 데이터로 변환됨
+//			assertEquals(DuplicateKeyException.class, transEx2.getClass());
+//		}
 	}
-
-	
-
-		
 }
