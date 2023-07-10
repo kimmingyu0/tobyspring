@@ -69,7 +69,12 @@ public class UserServiceTest {
 			}			
 		}		
 	}
-	
+
+	@Test
+	public void addAll() throws Exception {
+		userDao.deleteAll();
+		userService.addAll(users);
+	}
 	@Test
 	public void add() {
 		userDao.deleteAll();
@@ -112,6 +117,7 @@ public class UserServiceTest {
 			int a = 0;
 			a = 10;
 		}
+
 		
 		checkLevelUpgraded(users.get(1), false);
 	}

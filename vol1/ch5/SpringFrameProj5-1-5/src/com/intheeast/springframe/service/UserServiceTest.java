@@ -22,19 +22,30 @@ import com.intheeast.springframe.domain.User;
 
 import static com.intheeast.springframe.service.UserService.MIN_LOGCOUNT_FOR_SILVER;
 import static com.intheeast.springframe.service.UserService.MIN_RECCOMEND_FOR_GOLD;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {TestServiceFactory.class})
 public class UserServiceTest {
 	@Autowired 	UserService userService;	
 	@Autowired UserDao userDao;
-	
+//	User user;
+
 	List<User> users;	// test fixture
-	
+
+	/*
+	* bean() ->
+	* Autowired 한 Bean 객체가 잘 주입됐는지 확인 용도
+	* */
+	@Test
+	public void bean(){
+		assertNotEquals(this.userService, null);
+	}
+
 	@BeforeEach
 	public void setUp() {	
-		
+//		user = new User();
+
 		users = Arrays.asList(
 				new User("bumjin", "박범진", "p1", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER-1, 0),
 				new User("joytouch", "강명성", "p2", Level.BASIC, MIN_LOGCOUNT_FOR_SILVER, 0),
@@ -43,7 +54,19 @@ public class UserServiceTest {
 				new User("green", "오민규", "p5", Level.GOLD, 100, Integer.MAX_VALUE)
 				);
 	}
-	
+
+//	@Test
+//	public void upgradeLevel(){
+//		Level[] levels = Level.values();
+//		//=> Enum 열거체의 모든 상수를 저장한 배열을 생성하여 반환합니다.
+//		for(Level level : levels){
+//			if(level.nextLevel() == null) continue;
+//			user.setLevel(level);
+//			user.upgradeLevel();
+//			assertEquals(user.getLevel(), level.nextLevel());
+//		}
+//	}
+
 	@Test
 	public void upgradeLevels() {
 		userDao.deleteAll();

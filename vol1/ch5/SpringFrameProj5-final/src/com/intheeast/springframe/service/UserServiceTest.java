@@ -44,15 +44,17 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(SpringExtension.class)
-@ContextConfiguration(classes = {TestServiceFactory.class})
+@ContextConfiguration(classes = {TestServiceFactory.class, API_KEY.class})
 public class UserServiceTest {
 	@Autowired 	UserService userService;	
 	@Autowired UserDao userDao;	
 	@Autowired MailSender mailSender; 
 	@Autowired PlatformTransactionManager transactionManager;
+
+	@Autowired API_KEY KEY;
 	
 	List<User> users;	// test fixture
-	
+
 	@BeforeEach
 	public void setUp() {	
 		
@@ -91,11 +93,11 @@ public class UserServiceTest {
 	public void sendEmailToGmail() throws UnsupportedEncodingException {
 		String host = "smtp.gmail.com";
         int port = 587; // TLS : 587, SSL : 465
-        String username = "swseokitec@gmail.com";  // 발신자 Gmail 계정
-        String password = "kmwmvsbajccozsxc";  // 발신자 Gmail 계정 비밀번호
+        String username = KEY.getSmtpId();  // 발신자 Gmail 계정
+        String password = KEY.getSmtpPw();  // 발신자 Gmail 계정 비밀번호
 
         // 수신자 이메일 주소
-        String toAddress = "intheeast0305@gmail.com";
+        String toAddress = "minku49@naver.com";
 
         // 메일 속성 설정
         Properties props = new Properties();
