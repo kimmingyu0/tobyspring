@@ -45,7 +45,7 @@ public class TestServiceFactory {
 		userService.setAnyMailRequest(requestRepo());
 		return userService;
 	}
-	
+
 	@Bean
 	public DummyMailSender mailSender() {
 		DummyMailSender dummyMailSender = new DummyMailSender();

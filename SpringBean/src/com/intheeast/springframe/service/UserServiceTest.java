@@ -211,6 +211,7 @@ public class UserServiceTest {
 		testUserService.setUserDao(this.userDao); 
 		testUserService.setTransactionManager(this.transactionManager);
 		testUserService.setMailSender(this.mailSender);
+		testUserService.setAnyMailRequest(this.Request);
 		
 		userDao.deleteAll();			  
 		for(User user : users) userDao.add(user);
