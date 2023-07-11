@@ -88,7 +88,7 @@ public class UserServiceTest {
 		assertEquals(request.get(1), users.get(3).getEmail());		
 	}
 	
-	@Test
+	/*@Test
 	public void sendEmailToGmail() throws UnsupportedEncodingException {
 		//JavaMailSenderImpl sender = new JavaMailSenderImpl();
 		SimpleMailMessage emailMessage = new SimpleMailMessage();
@@ -142,7 +142,7 @@ public class UserServiceTest {
             System.out.println("Failed to send email. Error message: " + e.getMessage());
             fail("This sendEmailToGmail test is failed!!!");
         }
-    }	
+    }*/
 	
 	static class MockMailSender implements MailSender {
 		private List<String> requests = new ArrayList<String>();	
