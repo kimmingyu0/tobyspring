@@ -1,6 +1,5 @@
 .settings/
 bin/
 target/
-API_KEY.java
 
 .classpath
