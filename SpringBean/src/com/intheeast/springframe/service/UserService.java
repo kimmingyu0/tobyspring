@@ -20,6 +20,9 @@ public class UserService {
 	private MailSender mailSender;
 	private PlatformTransactionManager transactionManager;
 
+	private RequestRepo requestRepo;
+
+
 	public void setUserDao(UserDao userDao) {
 		this.userDao = userDao;
 	}
@@ -31,7 +34,11 @@ public class UserService {
 	public void setTransactionManager(PlatformTransactionManager transactionManager) {
 		this.transactionManager = transactionManager;
 	}
-	
+
+	public void setAnyMailRequest (RequestRepo requestRepo){
+		this.requestRepo = requestRepo;
+	}
+
 	public void upgradeLevels() {
 		TransactionStatus status = 
 				this.transactionManager.getTransaction(new DefaultTransactionDefinition());
@@ -69,10 +76,11 @@ public class UserService {
 	private void sendUpgradeEMail(User user) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setTo(user.getEmail());
-		mailMessage.setFrom("useradmin@ksug.org");
-		mailMessage.setSubject("Upgrade �ȳ�");
-		mailMessage.setText("����ڴ��� ����� " + user.getLevel().name());
-		
+//		mailMessage.setFrom("useradmin@ksug.org");
+		mailMessage.setSubject("등급 Upgrade 성공");
+		mailMessage.setText("이름 : " +user.getName()+ " 등급 업그레이드 : " + user.getLevel().name());
+		this.requestRepo.send(mailMessage);
+
 		this.mailSender.send(mailMessage);
 	}
 	
