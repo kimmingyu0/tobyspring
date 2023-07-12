@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RequestRepo extends JavaMailSenderImpl {
-    private final List<String> requests = new ArrayList<String>();
+    private List<String> requests = new ArrayList<String>();
 
     public List<String> getRequests() {
         return requests;

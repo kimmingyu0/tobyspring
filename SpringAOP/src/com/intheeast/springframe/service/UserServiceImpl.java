@@ -12,15 +12,15 @@ import com.intheeast.springframe.dao.UserDao;
 import com.intheeast.springframe.domain.Level;
 import com.intheeast.springframe.domain.User;
 
-public class UserService {
+public class UserServiceImpl implements UserService {
 	public static final int MIN_LOGCOUNT_FOR_SILVER = 50;
 	public static final int MIN_RECCOMEND_FOR_GOLD = 30;
 
 	private UserDao userDao;
 	private MailSender mailSender;
-	private PlatformTransactionManager transactionManager;
+//	private PlatformTransactionManager transactionManager;
 
-//	private RequestRepo requestRepo;
+	private RequestRepo requestRepo;
 
 
 	public void setUserDao(UserDao userDao) {
@@ -31,29 +31,20 @@ public class UserService {
 		this.mailSender = mailSender;
 	}
 	
-	public void setTransactionManager(PlatformTransactionManager transactionManager) {
-		this.transactionManager = transactionManager;
-	}
-
-//	public void setAnyMailRequest (RequestRepo requestRepo){
-//		this.requestRepo = requestRepo;
+//	public void setTransactionManager(PlatformTransactionManager transactionManager) {
+//		this.transactionManager = transactionManager;
 //	}
 
+	public void setAnyMailRequest (RequestRepo requestRepo){
+		this.requestRepo = requestRepo;
+	}
+
 	public void upgradeLevels() {
-		TransactionStatus status = 
-				this.transactionManager.getTransaction(new DefaultTransactionDefinition());
-		
-		try {
-			List<User> users = userDao.getAll();
-			for (User user : users) {
-				if (canUpgradeLevel(user)) {
-					upgradeLevel(user);
-				}
+		List<User> users = userDao.getAll();
+		for (User user : users) {
+			if (canUpgradeLevel(user)) {
+				upgradeLevel(user);
 			}
-			this.transactionManager.commit(status);
-		} catch (RuntimeException e) {
-			this.transactionManager.rollback(status);
-			throw e;
 		}
 	}
 	
@@ -76,10 +67,9 @@ public class UserService {
 	private void sendUpgradeEMail(User user) {
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 		mailMessage.setTo(user.getEmail());
-//		mailMessage.setFrom("useradmin@ksug.org");
 		mailMessage.setSubject("등급 Upgrade 성공");
 		mailMessage.setText("이름 : " +user.getName()+ " 등급 업그레이드 : " + user.getLevel().name());
-//		if (this.requestRepo != null) this.requestRepo.send(mailMessage);
+		if (this.requestRepo != null) this.requestRepo.send(mailMessage);
 
 		this.mailSender.send(mailMessage);
 	}

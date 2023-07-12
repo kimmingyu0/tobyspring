@@ -33,17 +33,25 @@ public class TestServiceFactory {
 		userDaoJdbc.setDataSource(dataSource());
 		return userDaoJdbc;
 	}
-	
+
 	@Bean
-	public UserService userService() {
-		UserService userService = new UserService();
-		userService.setUserDao(userDao());
-		userService.setTransactionManager(transactionManager());
-		//<property name="mailSender" ref="mailSender" />
-//		userService.setMailSender(mailSender());
-		userService.setMailSender(requestRepo());
-//		userService.setAnyMailRequest(requestRepo());
-		return userService;
+	public UserServiceTx userServiceTx(){
+		UserServiceTx userServiceTx = new UserServiceTx();
+		userServiceTx.setUserService(userService());
+		userServiceTx.setTransactionManager(transactionManager());
+
+		return userServiceTx;
+	}
+
+
+	@Bean
+	public UserServiceImpl userService() {
+		UserServiceImpl userServiceImpl = new UserServiceImpl();
+		userServiceImpl.setUserDao(userDao());
+//		userServiceImpl.setTransactionManager(transactionManager());
+		userServiceImpl.setMailSender(javaMailSender());
+		userServiceImpl.setAnyMailRequest(requestRepo());
+		return userServiceImpl;
 	}
 
 	@Bean
@@ -55,36 +63,23 @@ public class TestServiceFactory {
 	@Bean
 	public RequestRepo requestRepo(){
 		RequestRepo requestRepo = new RequestRepo();
-		requestRepo.setHost("smtp.gmail.com");
-		requestRepo.setPort(587);
-		requestRepo.setUsername("minku4820@gmail.com");
-		requestRepo.setPassword("kiqlmupofwubhrsq");
 
 		requestRepo.setJavaMailProperties(properties());
 		return requestRepo;
 	}
 
-//	@Bean
-//	public JavaMailSenderImpl javaMailSender() {
-//		// JaveMailSenderImpl 인스턴스 생성 후
-//		// 발신자 정보만 입력해야됨.
-//		// 다른 기능은 분리해서 의존성 주입
-//		JavaMailSenderImpl smailSender = new JavaMailSenderImpl();
-//		smailSender.setHost("smtp.gmail.com");
-//		smailSender.setPort(587);
-//		smailSender.setUsername("minku4820@gmail.com");
-//		smailSender.setPassword("kiqlmupofwubhrsq");
-//
-//		smailSender.setJavaMailProperties(properties());
-//
-//// 		bean 객체 분리후 의존성 주입
-//
-////		java.util.Properties props = smailSender.getJavaMailProperties();
-////		props.put("mail.smtp.auth", "true");
-////		props.put("mail.smtp.starttls.enable", "true");
-//
-//		return smailSender;
-//	}
+	@Bean
+	public JavaMailSenderImpl javaMailSender() {
+		JavaMailSenderImpl smailSender = new JavaMailSenderImpl();
+		smailSender.setHost("smtp.gmail.com");
+		smailSender.setPort(587);
+		smailSender.setUsername("minku4820@gmail.com");
+		smailSender.setPassword("kiqlmupofwubhrsq");
+
+		smailSender.setJavaMailProperties(properties());
+
+		return smailSender;
+	}
 
 	@Bean
 	public Properties properties (){

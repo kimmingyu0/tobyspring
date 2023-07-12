@@ -19,15 +19,15 @@ import com.intheeast.springframe.dao.UserDao;
 import com.intheeast.springframe.domain.Level;
 import com.intheeast.springframe.domain.User;
 
-import static com.intheeast.springframe.service.UserService.MIN_LOGCOUNT_FOR_SILVER;
-import static com.intheeast.springframe.service.UserService.MIN_RECCOMEND_FOR_GOLD;
+import static com.intheeast.springframe.service.UserServiceImpl.MIN_LOGCOUNT_FOR_SILVER;
+import static com.intheeast.springframe.service.UserServiceImpl.MIN_RECCOMEND_FOR_GOLD;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {TestServiceFactory.class})
 public class UserServiceTest {
-	@Autowired 	UserService userService;	
+	@Autowired UserServiceTx userServiceImpl;
 	@Autowired UserDao userDao;	
 	@Autowired MailSender mailSender;
 	@Autowired PlatformTransactionManager transactionManager;
@@ -51,11 +51,8 @@ public class UserServiceTest {
 	public void upgradeLevels() throws Exception {
 		userDao.deleteAll();
 		for(User user : users) userDao.add(user);
-		
-//		MockMailSender mockMailSender = new MockMailSender();
-//		userService.setMailSender(mockMailSender);
-				
-		userService.upgradeLevels();
+
+		userServiceImpl.upgradeLevels();
 
 		checkLevelUpgraded(users.get(0), false);
 		checkLevelUpgraded(users.get(1), true);
@@ -63,110 +60,12 @@ public class UserServiceTest {
 		checkLevelUpgraded(users.get(3), true);
 		checkLevelUpgraded(users.get(4), false);
 		
-//		List<String> request = mockMailSender.getRequests();
-//		assertEquals(request.size(), 2);
-//		assertEquals(request.get(0), users.get(1).getEmail());
-//		assertEquals(request.get(1), users.get(3).getEmail());
-
 		List<String> request = Request.getRequests();
 
 		assertEquals(request.size(), 2);
 		assertEquals(request.get(0), users.get(1).getEmail());
 		assertEquals(request.get(1), users.get(3).getEmail());
 	}
-	
-	/*@Test
-	public void sendEmailToGmail() throws UnsupportedEncodingException {
-		String host = "smtp.gmail.com";
-		int port = 587; // TLS : 587, SSL : 465
-		String username = "minku4820@gmail.com";  // 발신자 Gmail 계정
-		String password = "kiqlmupofwubhrsq";  // 발신자 Gmail 계정 비밀번호
-
-		// 수신자 이메일 주소
-		String toAddress = "minku49@naver.com";
-
-		// 메일 속성 설정
-		Properties props = new Properties();
-		props.put("mail.smtp.auth", "true");
-		props.put("mail.smtp.starttls.enable", "true");
-		props.put("mail.smtp.host", host);
-		props.put("mail.smtp.port", port);
-
-		// 인증 객체 생성
-		Authenticator authenticator = new Authenticator() {
-			protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(username, password);
-			}
-		};
-
-		// 세션 생성
-		Session session = Session.getInstance(props, authenticator);
-
-		try {
-			// MimeMessage 생성
-			MimeMessage message = new MimeMessage(session);
-
-//            MimeMessageHelper mailHelper = new MimeMessageHelper(message, true, "UTF-8");
-//            
-//            mailHelper.setFrom(from);
-//            mailHelper.setTo(to);
-//            mailHelper.setSubject(subject);
-//            mailHelper.setText(content, true);
-
-			message.setFrom(new InternetAddress(username));
-			message.setRecipient(Message.RecipientType.TO, new InternetAddress(toAddress));
-			message.setSubject(MimeUtility.encodeText("반가워요", "UTF-8", "B"));
-			message.setText("테스트 메일입니다.", "UTF-8");
-
-			// 메일 전송
-			Transport.send(message);
-
-			System.out.println("Email sent successfully!");
-		} catch (MessagingException e) {
-			System.out.println("Failed to send email. Error message: " + e.getMessage());
-			fail("This sendEmailToGmail test is failed!!!");
-		}
-	}
-	*/
-
-    /*	@Test
-	public void sendEmailToGmail() {
-		String toAddress = "minku49@naver.com";
-		String subject = "반가워요";
-		String text = "테스트 메일입니다.";
-
-		try {
-			MimeMessage message = MAILINFO.createMimeMessage();
-			MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
-
-			helper.setTo(toAddress);
-			helper.setSubject(subject);
-			helper.setText(text);
-
-			MAILINFO.send(message);
-
-			System.out.println("Email sent successfully!");
-		} catch (Exception e) {
-			System.out.println("Failed to send email. Error message: " + e.getMessage());
-			fail("This sendEmailToGmail test is failed!!!");
-		}
-	}
-	*/
-
-	/* static class MockMailSender implements MailSender {
-		private List<String> requests = new ArrayList<String>();
-
-		public List<String> getRequests() {
-			return requests;
-		}
-
-		public void send(SimpleMailMessage mailMessage)  {
-			requests.add(mailMessage.getTo()[0]);
-		}
-
-		public void send(SimpleMailMessage[] mailMessage) throws MailException {
-		}
-	} */
 
 	private void checkLevelUpgraded(User user, boolean upgraded) {
 		Optional<User> optionalUser = userDao.get(user.getId());
@@ -189,8 +88,8 @@ public class UserServiceTest {
 		User userWithoutLevel = users.get(0);  
 		userWithoutLevel.setLevel(null);
 		
-		userService.add(userWithLevel);	  
-		userService.add(userWithoutLevel);
+		userServiceImpl.add(userWithLevel);
+		userServiceImpl.add(userWithoutLevel);
 		
 		Optional<User> optionalUserWithLevelRead = userDao.get(userWithLevel.getId());
 		if (!optionalUserWithLevelRead.isEmpty()) {
@@ -207,18 +106,19 @@ public class UserServiceTest {
 	
 	@Test
 	public void upgradeAllOrNothing() throws Exception {
-		UserService testUserService = new TestUserService(users.get(3).getId());  
-		testUserService.setUserDao(this.userDao); 
-		testUserService.setTransactionManager(this.transactionManager);
-		testUserService.setMailSender(this.mailSender);
-//		testUserService.setAnyMailRequest(this.Request);
-		
+		UserServiceImpl testUserServiceImpl = new TestUserService(users.get(3).getId());
+		testUserServiceImpl.setUserDao(this.userDao);
+//		testUserServiceImpl.setTransactionManager(this.transactionManager);
+//		testUserServiceImpl.setTransactionManager(this.transactionManager);
+
+		testUserServiceImpl.setMailSender(this.mailSender);
+
 		userDao.deleteAll();			  
 		for(User user : users) userDao.add(user);
 		
 		try {
-			testUserService.upgradeLevels();   
-			fail("TestUserServiceException expected"); 
+			testUserServiceImpl.upgradeLevels();
+			fail("TestUserServiceException expected");
 		}
 		catch(TestUserServiceException e) { 
 		}
@@ -226,7 +126,7 @@ public class UserServiceTest {
 		checkLevelUpgraded(users.get(1), false);
 	}
 	
-	static class TestUserService extends UserService {
+	static class TestUserService extends UserServiceImpl {
 		private String id;
 		
 		private TestUserService(String id) {  
