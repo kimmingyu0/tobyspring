@@ -39,10 +39,20 @@ public class TestServiceFactory {
 	
 	// aop
 	//<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" />
+	// Default Proxy 생성. Spring 이 알아서 자동으로 필터해줌.
 	@Bean
 	  public DefaultAdvisorAutoProxyCreator advisorAutoProxyCreator() {
 	    return new DefaultAdvisorAutoProxyCreator();
 	  }
+
+	// Default Proxy Advisor 세팅.
+	@Bean
+	public DefaultPointcutAdvisor transactionAdvisor() {
+		DefaultPointcutAdvisor defaultPointcutAdvisor = new DefaultPointcutAdvisor();
+		defaultPointcutAdvisor.setAdvice(transactionAdvice());
+		defaultPointcutAdvisor.setPointcut(transactionPointcut());
+		return defaultPointcutAdvisor;
+	}
 	
 	@Bean
 	public TransactionAdvice transactionAdvice() {
@@ -57,14 +67,6 @@ public class TestServiceFactory {
 		nameMatchMethodPointcut.setMappedName("upgrade*");
 		return nameMatchMethodPointcut;
 	}
-
-	@Bean
-	public DefaultPointcutAdvisor transactionAdvisor() {
-		DefaultPointcutAdvisor defaultPointcutAdvisor = new DefaultPointcutAdvisor();
-		defaultPointcutAdvisor.setAdvice(transactionAdvice());
-		defaultPointcutAdvisor.setPointcut(transactionPointcut());
-		return defaultPointcutAdvisor;
-	}	
 
 	// application components
 	@Bean
