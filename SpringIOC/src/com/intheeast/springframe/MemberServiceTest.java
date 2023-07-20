@@ -13,11 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -32,17 +28,8 @@ public class MemberServiceTest {
     Member mem2 = new Member("김민규1", "김민규1");
     Member mem3 = new Member("김민규2", "김민규2");
 
-
     @BeforeEach
-    public void setMemberRepo() throws SQLException, ClassNotFoundException {
-//        Class.forName("com.mysql.cj.jdbc.Driver");
-//        Connection c = DriverManager.getConnection("jdbc:mysql://localhost:3306/userdb?characterEncoding=UTF-8",
-//                "root",
-//                "1234");
-//        PreparedStatement ps = c.prepareStatement("delete from member");
-//        ps.executeUpdate();
-//        ps.close();
-//        c.close();
+    public void setMemberRepo() {
         memberService.getMemberRepository().deleteAll();
 
         MemberRepository memberRepo = memberService.getMemberRepository();
@@ -67,14 +54,14 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("회원 조회")
-    public void find() throws SQLException, ClassNotFoundException {
+    public void find() {
         //1번 유저 아이디 비교
         assertEquals(mem1.getId(), memberService.find(mem1).getId());
     }
 
     @Test
     @DisplayName("회원 수정")
-    public void modify() throws SQLException, ClassNotFoundException {
+    public void modify() {
         Member tmp = new Member("tmpId", "tmpName");
         //1번 유저 수정
         memberService.modify(1L, tmp);
@@ -82,7 +69,7 @@ public class MemberServiceTest {
 
     @Test
     @DisplayName("회원 삭제")
-    public void delete() throws SQLException, ClassNotFoundException {
+    public void delete() {
         //1번 유저를 삭제
         memberService.delete(1L);
         assertNull(memberService.find(mem1));
