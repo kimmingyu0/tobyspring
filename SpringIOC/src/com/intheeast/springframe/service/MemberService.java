@@ -6,7 +6,7 @@ import java.sql.SQLException;
 
 public interface MemberService {
 
-    Member find(Long idx) throws SQLException, ClassNotFoundException;
+    Member find(Member member) throws SQLException, ClassNotFoundException;
 
     void join(Long idx, Member member) throws SQLException, ClassNotFoundException;
 

@@ -17,8 +17,8 @@ public class MemberServiceImpl implements MemberService{
             this.memberRepository = memberRepo;
     }
 
-    public Member find (Long idx) throws SQLException, ClassNotFoundException {
-        Optional<Member> memberFind = memberRepository.find(idx);
+    public Member find (Member member) throws SQLException, ClassNotFoundException {
+        Optional<Member> memberFind = memberRepository.findById(member);
         if(memberFind.isEmpty()){
             return null;
         } else {
@@ -44,5 +44,12 @@ public class MemberServiceImpl implements MemberService{
         memberRepository.remove(idx);
     }
 
+    public int repositorySize(){
+        if(memberRepository.repositorySize().isPresent()){
+            return memberRepository.repositorySize().get();
+        } else {
+            return 0;
+        }
+    }
 
 }

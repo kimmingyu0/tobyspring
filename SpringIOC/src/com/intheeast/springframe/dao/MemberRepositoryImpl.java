@@ -21,8 +21,17 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public Optional<Member> find(Long idx) throws SQLException, ClassNotFoundException {
-        return Optional.ofNullable(memoryMemberRepositoy.get(idx));
+    public Optional<Member> findById(Member member) throws SQLException, ClassNotFoundException {
+        for( Map.Entry<Long, Member> entry : memoryMemberRepositoy.entrySet() ){
+//            Long longKey = entry.getKey();
+            Member memberValue = entry.getValue();
+            if(memberValue.getId() == member.getId()){
+                return Optional.of(memberValue);
+            }
+//            System.out.println( longKey +":"+ memberValue );
+        }
+        return Optional.empty();
+//        return Optional.ofNullable(memoryMemberRepositoy.get(idx));
     }
     @Override
     public void join(Long idx, Member member) throws SQLException, ClassNotFoundException {
@@ -40,5 +49,8 @@ public class MemberRepositoryImpl implements MemberRepository {
     public void deleteAll(){
         memoryMemberRepositoy.clear();
     }
-
+    @Override
+    public Optional<Integer> repositorySize(){
+        return Optional.of(memoryMemberRepositoy.size());
+    }
 }

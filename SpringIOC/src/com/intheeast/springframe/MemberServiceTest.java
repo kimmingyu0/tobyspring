@@ -4,6 +4,7 @@ import com.intheeast.springframe.dao.MemberRepository;
 import com.intheeast.springframe.dto.Member;
 import com.intheeast.springframe.factory.MemberFactory;
 import com.intheeast.springframe.service.MemberServiceImpl;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -19,6 +20,7 @@ import java.sql.SQLException;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 @ExtendWith(SpringExtension.class)
 @ContextConfiguration(classes = {MemberFactory.class})
@@ -29,6 +31,7 @@ public class MemberServiceTest {
     Member mem1 = new Member("김민규", "김민규");
     Member mem2 = new Member("김민규1", "김민규1");
     Member mem3 = new Member("김민규2", "김민규2");
+
 
     @BeforeEach
     public void setMemberRepo() throws SQLException, ClassNotFoundException {
@@ -48,6 +51,10 @@ public class MemberServiceTest {
         memberRepo.join(3L, mem3);
     }
 
+    @AfterEach
+    public void sizeCheck(){
+        System.out.println("RepositorySize : " + memberService.repositorySize());
+    }
 
     @Test
     @DisplayName("회원가입 테스트")
@@ -55,14 +62,14 @@ public class MemberServiceTest {
         Member tmp = new Member("김민규3", "김민규");
         memberService.join(1L, mem3);
         memberService.join(4L, tmp);
-        assertEquals(tmp.getId(), memberService.find(4L).getId());
+        assertEquals(tmp.getId(), memberService.find(tmp).getId());
     }
 
     @Test
     @DisplayName("회원 조회")
     public void find() throws SQLException, ClassNotFoundException {
         //1번 유저 아이디 비교
-        assertEquals(mem1.getId(), memberService.find(1L).getId());
+        assertEquals(mem1.getId(), memberService.find(mem1).getId());
     }
 
     @Test
@@ -78,6 +85,6 @@ public class MemberServiceTest {
     public void delete() throws SQLException, ClassNotFoundException {
         //1번 유저를 삭제
         memberService.delete(1L);
-        assertEquals(memberService.find(1L), null);
+        assertNull(memberService.find(mem1));
     }
 }

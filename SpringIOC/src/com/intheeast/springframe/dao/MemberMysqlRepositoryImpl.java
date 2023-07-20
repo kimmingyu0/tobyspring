@@ -3,7 +3,6 @@ package com.intheeast.springframe.dao;
 import com.intheeast.springframe.dto.Member;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -66,7 +65,7 @@ public class MemberMysqlRepositoryImpl implements MemberRepository {
 //    }
 
     @Override
-    public Optional<Member> find(Long id) throws SQLException, ClassNotFoundException {
+    public Optional<Member> findById(Member member) throws SQLException, ClassNotFoundException {
 //        Connection c = connectionMaker();
 //        PreparedStatement ps = c.prepareStatement("select * from member where idx = ? ");
 //        ps.setString(1, String.valueOf(id));
@@ -81,15 +80,15 @@ public class MemberMysqlRepositoryImpl implements MemberRepository {
 //        ps.close();
 //        c.close();
 //        return null;
-        String sql = "select id, name from member where idx = ?";
+        String sql = "select id, name from member where id = ?";
 
         try {
             Member item = this.jdbcTemplate.queryForObject(sql, (rs, rowNum)->{
-                Member member = new Member();
-                member.setId(rs.getString("id"));
-                member.setName(rs.getString("name"));
-                return member;
-            }, id);
+                Member findMember = new Member();
+                findMember.setId(rs.getString("id"));
+                findMember.setName(rs.getString("name"));
+                return findMember;
+            }, member.getId());
             return Optional.of(item);
         } catch (EmptyResultDataAccessException e) {
             return Optional.empty();
@@ -159,5 +158,15 @@ public class MemberMysqlRepositoryImpl implements MemberRepository {
     @Override
     public void deleteAll(){
         this.jdbcTemplate.update("delete from member");
+    }
+    @Override
+    public Optional<Integer> repositorySize(){
+        String sql = "select count(idx) as size from member";
+        try {
+            Integer item = jdbcTemplate.queryForObject(sql, (rs, rowNum) -> Integer.parseInt(rs.getString("size")));
+            return Optional.of(item);
+        } catch (EmptyResultDataAccessException e) {
+            return Optional.empty();
+        }
     }
 }
