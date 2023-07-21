@@ -6,7 +6,9 @@ import com.intheeast.springframe.dao.MemberRepositoryImpl;
 import com.intheeast.springframe.service.MemberServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
+import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 import java.sql.SQLException;
@@ -28,16 +30,15 @@ public class MemberFactory {
     }
 
     @Bean
-    public MemberServiceImpl memberService () throws SQLException, ClassNotFoundException {
+    public MemberServiceImpl memberService () {
         MemberServiceImpl member = new MemberServiceImpl();
-        member.setMemberRepository(memberSqlRepo());
+        member.setMemberRepository(memberRepo());
         return member;
     }
 
     @Bean
     public MemberRepository memberRepo() {
         MemberRepositoryImpl memberRepository = new MemberRepositoryImpl();
-
         return memberRepository;
     }
 
