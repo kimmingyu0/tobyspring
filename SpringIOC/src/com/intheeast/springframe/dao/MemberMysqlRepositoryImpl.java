@@ -8,6 +8,7 @@ import javax.sql.DataSource;
 import java.util.Optional;
 
 public class MemberMysqlRepositoryImpl implements MemberRepository {
+
     private JdbcTemplate jdbcTemplate;
 
     public void setDataSource(DataSource dataSource) {
@@ -43,11 +44,16 @@ public class MemberMysqlRepositoryImpl implements MemberRepository {
 
     @Override
     public void join(Long idx, Member member){
-        this.jdbcTemplate.update("insert into member(idx, id, name) values (?,?,?)", ps -> {
-            ps.setString(1, String.valueOf(idx));
-            ps.setString(2, member.getId());
-            ps.setString(3, member.getName());
-        } );
+        if(findById(member).isEmpty()){
+            this.jdbcTemplate.update("insert into member(idx, id, name) values (?,?,?)", ps -> {
+                ps.setString(1, String.valueOf(idx));
+                ps.setString(2, member.getId());
+                ps.setString(3, member.getName());
+            } );
+            System.out.println("회원 등록 되었습니다, 인덱스 번호 : " + idx);
+        } else {
+            System.out.println("중복된 회원입니다, 인덱스 번호 : " + idx);
+        }
     }
 
     @Override

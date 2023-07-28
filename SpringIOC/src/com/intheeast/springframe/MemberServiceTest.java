@@ -1,12 +1,8 @@
 package com.intheeast.springframe;
 
 import com.intheeast.springframe.dao.MemberRepository;
-import com.intheeast.springframe.dao.MemberRepositoryImpl;
 import com.intheeast.springframe.dto.Member;
 import com.intheeast.springframe.factory.MemberFactory;
-import com.intheeast.springframe.proxy.LoggingHandler;
-
-import com.intheeast.springframe.service.MemberService;
 import com.intheeast.springframe.service.MemberServiceImpl;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,10 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
-import org.springframework.transaction.PlatformTransactionManager;
-
-import java.lang.reflect.Proxy;
-import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -33,7 +25,6 @@ public class MemberServiceTest {
     Member mem1 = new Member("김민규", "김민규");
     Member mem2 = new Member("김민규1", "김민규1");
     Member mem3 = new Member("김민규2", "김민규2");
-
 
     @BeforeEach
     public void setMemberRepo() {

@@ -3,15 +3,14 @@ package com.intheeast.springframe.factory;
 import com.intheeast.springframe.dao.MemberMysqlRepositoryImpl;
 import com.intheeast.springframe.dao.MemberRepository;
 import com.intheeast.springframe.dao.MemberRepositoryImpl;
+import com.intheeast.springframe.proxy.LoggingHandler;
 import com.intheeast.springframe.service.MemberServiceImpl;
-import org.springframework.context.annotation.Bean;
+ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.jdbc.datasource.SimpleDriverDataSource;
-import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
+import java.lang.reflect.Proxy;
 
 @Configuration
 public class MemberFactory {
@@ -32,8 +31,18 @@ public class MemberFactory {
     @Bean
     public MemberServiceImpl memberService () {
         MemberServiceImpl member = new MemberServiceImpl();
-        member.setMemberRepository(memberRepo());
+        member.setMemberRepository(proxyMemberRepository());
         return member;
+    }
+
+    @Bean
+    public MemberRepository proxyMemberRepository(){
+        LoggingHandler loggingHandler = new LoggingHandler();
+        loggingHandler.setTarget(memberRepo());
+        loggingHandler.setPattern(new String[]{"replace", "findById", "remove"});
+        return (MemberRepository) Proxy.newProxyInstance(
+                getClass().getClassLoader(), new Class[]{MemberRepository.class}, loggingHandler
+        );
     }
 
     @Bean
@@ -48,6 +57,4 @@ public class MemberFactory {
         memberRepository.setDataSource(dataSource());
         return memberRepository;
     }
-
-
 }

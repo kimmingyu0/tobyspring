@@ -4,10 +4,10 @@ import com.intheeast.springframe.dto.Member;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 public class MemberRepositoryImpl implements MemberRepository {
-
     private Map<Long, Member> memoryMemberRepositoy = new HashMap<>();
 
     @Override
@@ -23,7 +23,7 @@ public class MemberRepositoryImpl implements MemberRepository {
     public Optional<Member> findById(Member member) {
         for (Map.Entry<Long, Member> entry : memoryMemberRepositoy.entrySet()) {
             Member memberValue = entry.getValue();
-            if (memberValue.getId() == member.getId()) {
+            if (Objects.equals(memberValue.getId(), member.getId())) {
                 return Optional.of(memberValue);
             }
         }
@@ -32,7 +32,12 @@ public class MemberRepositoryImpl implements MemberRepository {
 
     @Override
     public void join(Long idx, Member member) {
-        memoryMemberRepositoy.put(idx, member);
+        if(findById(member).isEmpty()){
+            memoryMemberRepositoy.put(idx, member);
+            System.out.println("회원 등록 되었습니다, 인덱스 번호 : " + idx);
+        } else {
+            System.out.println("중복된 회원입니다, 인덱스 번호 : " + idx);
+        }
     }
 
     @Override

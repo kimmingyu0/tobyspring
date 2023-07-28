@@ -3,23 +3,24 @@ package com.intheeast.springframe.proxy;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 
 public class LoggingHandler implements InvocationHandler {
     private Object target;
-    private String pattern;
+    private String[] pattern;
 
     public void setTarget(Object target) {
         this.target = target;
     }
 
-    public void setPattern(String pattern) {
+    public void setPattern(String[] pattern) {
         this.pattern = pattern;
     }
 
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-        if(method.getName().startsWith(pattern)){
+        if(Arrays.asList(pattern).contains(method.getName())){
             return invokeInLogging(method, args);
         } else {
             return method.invoke(target, args);
